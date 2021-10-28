@@ -1,0 +1,186 @@
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import { Badge, Grid, IconButton, Typography } from "@material-ui/core";
+import {
+  // Business,
+  Event,
+  Help,
+  // Help,
+  History,
+  Person,
+} from "@material-ui/icons";
+import { history } from "../../helper/history";
+import { useQuery } from "@apollo/client";
+import { useState, useEffect } from "react";
+import useCustomerApi from "../../hooks/customerhooks";
+import Appointment from "../../models/Appointment";
+import moment from "moment";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    icon: {
+      padding: 0,
+    },
+    title: {
+      flexGrow: 1,
+    },
+    pos: {
+      top: "auto",
+      bottom: 0,
+    },
+    bar: {
+      height: "7vh",
+    },
+    here: {
+      backgroundColor: "#C785EB",
+    },
+    posCustomer: {
+      backgroundColor: "#7C5D92",
+      top: "auto",
+      bottom: 0,
+    },
+  })
+);
+
+interface BottomBarProps {
+  page: string;
+}
+
+function BottomBar({ page }: BottomBarProps) {
+  const classes = useStyles();
+  const accessToken = localStorage.getItem("accessToken");
+
+  const { GET_ALLAPPOINTMENT_BY_CUSTOMER } = useCustomerApi();
+
+  const id = localStorage.getItem("_id");
+
+  const { loading, error, data, refetch } = useQuery(
+    GET_ALLAPPOINTMENT_BY_CUSTOMER,
+    {
+      variables: { getAllAppointmentByCustomerCustomerId: id },
+      pollInterval: 60000,
+    }
+  );
+  const [appointment, setAppointment] = useState<Appointment[]>(
+    data !== undefined ? data.getAllAppointmentByCustomer : []
+  );
+
+  useEffect(() => {
+    if (!loading && data) {
+      setAppointment(data.getAllAppointmentByCustomer);
+    }
+    if (error) console.log(error?.graphQLErrors);
+  }, [loading, data, error]);
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="fixed" className={classes.posCustomer}>
+        <Toolbar className={classes.bar}>
+          <Grid container direction="row" justify="space-around">
+            <IconButton
+              color="inherit"
+              onClick={() => {
+                refetch();
+                history.push(`/profile&=${accessToken}`);
+              }}
+              className={classes.icon}
+            >
+              <Typography>
+                <Person />
+                {page === "Profile" && (
+                  <Typography style={{ fontSize: 8 }}>profile</Typography>
+                )}
+              </Typography>
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => {
+                refetch();
+                history.push(`/appointment&=${accessToken}`);
+              }}
+              className={classes.icon}
+            >
+              <Typography>
+                <Badge
+                  badgeContent={
+                    appointment.filter(
+                      (a) =>
+                        new Date(
+                          moment(a.AppointTime).format("DD MMMM yyyy")
+                        ) >=
+                          new Date(moment(new Date()).format("DD MMMM yyyy")) &&
+                        new Date(
+                          moment(a.AppointTime).format("DD MMMM yyyy")
+                        ) <=
+                          new Date(
+                            moment(new Date())
+                              .add(7, "days")
+                              .format("DD MMMM yyyy")
+                          ) &&
+                        a.Status.Tag !== "Completed"
+                    ).length
+                  }
+                  color="error"
+                >
+                  <Event />
+                </Badge>
+
+                {page === "Appointment" && (
+                  <Typography style={{ fontSize: 8 }}>appointment</Typography>
+                )}
+              </Typography>
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => {
+                refetch();
+                history.push(`/history&=${accessToken}`);
+              }}
+              className={classes.icon}
+            >
+              <Typography>
+                <Badge
+                  badgeContent={
+                    appointment.filter(
+                      (a) =>
+                        a.Review?.Star === null && a.Status.Tag === "Completed"
+                    ).length
+                  }
+                  color="error"
+                >
+                  <History />
+                </Badge>
+                {page === "History" && (
+                  <Typography style={{ fontSize: 8 }}>history</Typography>
+                )}
+              </Typography>
+            </IconButton>
+            {/* <IconButton
+              color="inherit"
+              onClick={() => history.push(`/hospital&information&=${accessToken}`)}
+            >
+              <Business />
+            </IconButton> */}
+            <IconButton
+              color="inherit"
+              onClick={() => history.push(`/customer&service&=${accessToken}`)}
+            >
+              <Typography>
+                <Help />
+                {page === "Customer Service" && (
+                  <Typography style={{ fontSize: 8 }}>help</Typography>
+                )}
+              </Typography>
+            </IconButton>
+          </Grid>
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
+}
+
+export default BottomBar;
