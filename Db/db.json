@@ -1,0 +1,17 @@
+{
+  "GuideStatus": ["Wait for verify", "Verify Success", "Verify Failed"],
+  "GuideScheduleStatus": ["Wait for Customer Request","Customer Requested", "Confirm Appointment"],
+  "AppointmentStatus": [
+    "Wait for Guide to Confirm",
+    "Guide Confirm",
+    "Guide Reject",
+    "In process",
+    "Completed",
+    "Expired"
+  ],
+  "PeriodStatus": ["Morning", "Afternoon", "All-day"],
+  "PeopleRole": ["Guide", "Customer", "Admin"],
+  "StandardPeriodPrice": 175,
+  "StandardAllDayPrice": 300,
+  "ReviewStatRating": [3,5,7,9,11,15]
+}
