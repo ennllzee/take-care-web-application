@@ -1,5 +1,5 @@
 # take-care-web-application
-ประกอบด้วย 4 ส่วน ได้แก่
+ประกอบด้วย 4 ส่วน โดยสามารถดู code ของแต่ละส่วนได้ทาง branch ต่าง ๆ ดังนี้
 ## 1) take-care-api ส่วน Backend ในการพัฒนา API
 วิธีติดตั้งและการใช้งาน</br>
 $ npm install</br>
