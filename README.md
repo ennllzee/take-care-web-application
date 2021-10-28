@@ -19,4 +19,4 @@ local url : http://localhost:3001
 วิธีติดตั้งและการใช้งาน</br>
 $ npm install</br>
 $ npm start</br>
-local url : http://localhost:3002
+local url : http://localhost:3002 
