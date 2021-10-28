@@ -1,1 +1,26 @@
-# take-care-web-application
+## take-care-web-application
+ประกอบด้วย 4 ส่วน ได้แก่
+# 1) take-care-api
+## ส่วน Backend ในการพัฒนา API
+วิธีติดตั้งและการใช้งาน
+$ npm install
+$ npm start
+local url : http://localhost:4000/graphql
+# 2) take-care-customer
+## ส่วน Frontend ของ Customer Platform
+วิธีติดตั้งและการใช้งาน
+$ npm install
+$ npm start
+local url : http://localhost:3000
+# 3) take-care-guide
+## ส่วน Frontend ของ Guide Platform
+วิธีติดตั้งและการใช้งาน
+$ npm install
+$ npm start
+local url : http://localhost:3001
+# 4) take-care-admin
+## ส่วน Frontend ของ Admin Platform
+วิธีติดตั้งและการใช้งาน
+$ npm install
+$ npm start
+local url : http://localhost:3002
